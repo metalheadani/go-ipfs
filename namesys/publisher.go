@@ -10,12 +10,12 @@ import (
 
 	ci "gx/ipfs/QmNiJiXwWE3kRhZrC5ej3kSjWHm337pYfhjLGSCDNKJP2s/go-libp2p-crypto"
 	peer "gx/ipfs/QmPJxxDsX2UbchSHobbYuvz7qnyJTFKvaKMzE2rZWJ4x5B/go-libp2p-peer"
-	path "gx/ipfs/QmQ3YSqfxunT5QBg6KBVskKyRE26q6hjSMyhpxchpm7jEN/go-path"
+	path "gx/ipfs/QmQiXYqcxU5AvpAJkfbXUEZgUYKog1Pd2Cv3WBiW2Hpe8M/go-path"
 	routing "gx/ipfs/QmRjT8Bkut84fHf9nxMQBxGsqLAkqzMdFaemDK7e61dBNZ/go-libp2p-routing"
+	ft "gx/ipfs/QmSygPSC63Uka8z9PYokAS4thiMAor17vhXUTi4qmKHh6P/go-unixfs"
 	ipns "gx/ipfs/QmVpC4PPSaoqZzWYEnQURnsQagimcWEzNKZouZyd7sNJdZ/go-ipns"
 	pb "gx/ipfs/QmVpC4PPSaoqZzWYEnQURnsQagimcWEzNKZouZyd7sNJdZ/go-ipns/pb"
 	proto "gx/ipfs/QmdxUuburamoF6zF9qjeQC4WYcWGbWuRmdLacMEsW8ioD8/gogo-protobuf/proto"
-	ft "gx/ipfs/QmetDvVkKzbr8PYuBV6S48q5DU9EUQktYjo9KdkA3zbQgK/go-unixfs"
 	ds "gx/ipfs/Qmf4xQhNomPNhrtZc67qSnfJSjxjXs9LWvknJtSXwimPrM/go-datastore"
 	dsquery "gx/ipfs/Qmf4xQhNomPNhrtZc67qSnfJSjxjXs9LWvknJtSXwimPrM/go-datastore/query"
 	base32 "gx/ipfs/QmfVj3x4D6Jkq9SEoi5n2NmoUomLwoeiwnYz2KQa15wRw6/base32"
@@ -24,7 +24,7 @@ import (
 const ipnsPrefix = "/ipns/"
 
 const PublishPutValTimeout = time.Minute
-const DefaultRecordTTL = 24 * time.Hour
+const DefaultRecordEOL = 24 * time.Hour
 
 // IpnsPublisher is capable of publishing and resolving names to the IPFS
 // routing system.
@@ -48,7 +48,7 @@ func NewIpnsPublisher(route routing.ValueStore, ds ds.Datastore) *IpnsPublisher 
 // and publishes it out to the routing system
 func (p *IpnsPublisher) Publish(ctx context.Context, k ci.PrivKey, value path.Path) error {
 	log.Debugf("Publish %s", value)
-	return p.PublishWithEOL(ctx, k, value, time.Now().Add(DefaultRecordTTL))
+	return p.PublishWithEOL(ctx, k, value, time.Now().Add(DefaultRecordEOL))
 }
 
 func IpnsDsKey(id peer.ID) ds.Key {
